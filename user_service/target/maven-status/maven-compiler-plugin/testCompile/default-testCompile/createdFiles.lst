@@ -1,0 +1,12 @@
+com/example/notes_app/service/AccountServiceTest.class
+com/example/notes_app/service/RoleServiceTest.class
+com/example/notes_app/service/PermissionServiceTest.class
+com/example/notes_app/service/NoteServiceTest.class
+com/example/notes_app/service/auth/AuthServiceTest.class
+com/example/notes_app/controller/PermissionControllerTest.class
+com/example/notes_app/NotesAppApplicationTests.class
+com/example/notes_app/controller/NoteControllerTest.class
+com/example/notes_app/controller/auth/AuthControllerTest.class
+com/example/notes_app/controller/RoleControllerTest.class
+com/example/notes_app/controller/AccountControllerTest.class
+com/example/notes_app/controller/auth/AuthControllerIntegrationTest.class

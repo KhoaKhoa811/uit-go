@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package com.example.notes_app.grpc.account;
+option java_multiple_files = true;
+option java_package = "com.example.notes_app.grpc.account";
+option java_outer_classname = "AccountServiceProto";
+
+message AccountRequest {
+  int32 id = 1;
+}
+
+message AccountResponse {
+  int32 id = 1;
+  string email = 2;
+}
+
+message Empty {}
+
+service AccountService {
+  rpc GetAccountById(AccountRequest) returns (AccountResponse);
+  rpc DeleteAccountById(AccountRequest) returns (Empty);
+}
