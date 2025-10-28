@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package driver;
+
+option go_package = "./pkg/pb";
+
+message GetAvailableDriversNearUserRequest {
+   double latitude = 1;
+   double longitude = 2;
+   int32 max_driver = 3;
+   int32 radius = 4;
+}
+
+message GetAvailableDriversNearUserResponse {
+   string status = 1;
+   repeated int64 drivers = 2;
+}
+
+message SendNotificationToDriverRequest {
+   int64 driver_id = 1;
+   double pickup_latitude = 2;
+   double pickup_longitude = 3;
+   double dropoff_latitude = 4;
+   double dropoff_longitude = 5;
+   double distance =  6;
+   int64 trip_fare = 7;
+}
+
+message SendNotificationToDriverResponse {
+   string status = 1;
+   string message = 2;
+}
+
+
+service DriverService {
+   rpc GetAvailableDriversNearUser(GetAvailableDriversNearUserRequest) returns (GetAvailableDriversNearUserResponse);
+   rpc SendNotificationToDriver(SendNotificationToDriverRequest) returns (SendNotificationToDriverResponse);
+}

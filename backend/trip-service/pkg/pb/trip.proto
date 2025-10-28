@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package trip;
+
+option go_package = "./pkg/pb";
+
+service TripService {
+    rpc CreateTrip(CreateTripRequest) returns (CreateTripResponse);
+    rpc EstimateTripFare(EstimateTripFareRequest) returns (EstimateTripFareResponse);
+    rpc UpdateTripStatus(UpdateTripStatusRequest) returns (UpdateTripStatusResponse);
+}
+
+message CreateTripRequest {
+    int64 user_id = 1;
+    double pickup_latitude = 2;
+    double pickup_longitude = 3;
+    double dropoff_latitude = 4;
+    double dropoff_longitude = 5;
+}
+
+message CreateTripResponse {
+    string status = 1;
+    string message = 2;
+    int64 driver_id = 3;
+    int64 trip_id = 4;
+}
+
+message EstimateTripFareRequest {
+    double pickup_latitude = 1;
+    double pickup_longitude = 2;
+    double dropoff_latitude = 3;
+    double dropoff_longitude = 4;
+}
+
+message EstimateTripFareResponse {
+    double distance = 1;
+    int64 estimate_trip_fare = 2;
+}
+
+message UpdateTripStatusRequest {
+    int64 driver_id = 1;
+    int64 trip_id =  2;
+    string response = 3;
+}
+
+message UpdateTripStatusResponse {
+    string status = 1;
+    string message = 2;
+}
