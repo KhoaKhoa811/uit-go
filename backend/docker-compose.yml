@@ -1,0 +1,71 @@
+version: "3.9"
+
+services:
+  api-gateway:
+    image: uitgo/api-gateway:latest
+    volumes:
+      - ./api-gateway/pkg/config/envs/dev.env:/app/pkg/config/envs/dev.env
+    environment:
+      - PORT=:3000
+      - DRIVER_SVC_URL=driver-svc:50053
+      - TRIP_SVC_URL=trip-svc:50052
+    ports:
+      - "3000:3000"
+    depends_on:
+      - driver-svc
+      - trip-svc
+    restart: always
+
+  driver-svc:
+    image: uitgo/driver-service:latest
+    volumes:
+      - ./driver-service/pkg/config/envs/dev.env:/app/pkg/config/envs/dev.env
+    environment:
+      - PORT=:50053
+      - DB_URL=postgres://postgres:postgres@driver-db:5432/driver_svc
+      - REDIS_URL=redis://driver-redis:6379/0
+      - TRIP_SVC_URL=trip-svc:50052
+      - SOCKET_PORT=:8080
+    depends_on:
+      - trip-svc
+      - driver-db
+      - driver-redis
+    restart: always
+  
+  trip-svc:
+    image: uitgo/trip-service:latest
+    volumes:
+      - ./trip-service/pkg/config/envs/dev.env:/app/pkg/config/envs/dev.env
+    environment:
+      - PORT=:50052
+      - DRIVER_SVC_URL=driver-svc:50053
+      - DB_URL=postgres://postgres:postgres@trip-db:5432/trip_svc
+    depends_on:
+      - trip-db
+    restart: always
+  
+  driver-db:
+    image: postgres:latest
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_DB=driver_svc
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    restart: always
+  
+  trip-db:
+    image: postgres:latest
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_DB=trip_svc
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    restart: always
+
+  driver-redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    restart: always

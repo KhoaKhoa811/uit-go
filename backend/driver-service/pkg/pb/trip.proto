@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package trip;
+
+option go_package = "./pkg/pb";
+
+service TripService {
+    rpc UpdateTripStatus(UpdateTripStatusRequest) returns (UpdateTripStatusResponse);
+}
+
+message UpdateTripStatusRequest {
+    int64 driver_id = 1;
+    int64 trip_id =  2;
+    string response = 3;
+}
+
+message UpdateTripStatusResponse {
+    string status = 1;
+    string message = 2;
+}
