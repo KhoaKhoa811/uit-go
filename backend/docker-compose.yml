@@ -2,6 +2,7 @@ version: "3.9"
 
 services:
   api-gateway:
+    build: ./api-gateway
     image: uitgo/api-gateway:latest
     volumes:
       - ./api-gateway/pkg/config/envs/dev.env:/app/pkg/config/envs/dev.env
@@ -17,6 +18,7 @@ services:
     restart: always
 
   driver-svc:
+    build: ./driver-service
     image: uitgo/driver-service:latest
     volumes:
       - ./driver-service/pkg/config/envs/dev.env:/app/pkg/config/envs/dev.env
@@ -33,6 +35,7 @@ services:
     restart: always
   
   trip-svc:
+    build: ./trip-service
     image: uitgo/trip-service:latest
     volumes:
       - ./trip-service/pkg/config/envs/dev.env:/app/pkg/config/envs/dev.env
@@ -43,6 +46,23 @@ services:
     depends_on:
       - trip-db
     restart: always
+
+  user-svc:
+    build: ./user-service
+    container_name: notes-backend
+    image: uitgo/user-service:latest
+    depends_on:
+      - user-db
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./user-service:/app/user-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:mysql://user-db:3306/notesdb
+      - SPRING_DATASOURCE_USERNAME=notesuser
+      - SPRING_DATASOURCE_PASSWORD=notespass
   
   driver-db:
     image: postgres:latest
@@ -52,6 +72,16 @@ services:
       - POSTGRES_DB=driver_svc
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    restart: always
+
+  user-db:
+    image: mysql:5.7
+    container_name: notes-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: notesdb
+      MYSQL_USER: notesuser
+      MYSQL_PASSWORD: notespass
     restart: always
   
   trip-db:
@@ -69,3 +99,7 @@ services:
     ports:
       - "6379:6379"
     restart: always
+
+  
+
+  
